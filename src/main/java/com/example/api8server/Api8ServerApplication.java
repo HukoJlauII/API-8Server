@@ -14,16 +14,14 @@ import java.io.IOException;
 public class Api8ServerApplication {
     private static TaskRepository taskRepository;
     @Autowired
-    public static void setTaskRepository(TaskRepository taskRepository) {
+    public void setTaskRepository(TaskRepository taskRepository) {
         Api8ServerApplication.taskRepository = taskRepository;
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
         SpringApplication.run(Api8ServerApplication.class, args);
         Server server = ServerBuilder.forPort(8081).addService(new TaskServiceImpl(taskRepository)).build();
-
         server.start();
-
         System.out.println("Server started");
         server.awaitTermination();
     }

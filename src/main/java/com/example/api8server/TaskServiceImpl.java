@@ -7,7 +7,7 @@ import io.grpc.stub.StreamObserver;
 import java.util.ArrayList;
 
 public class TaskServiceImpl extends TaskServiceGrpc.TaskServiceImplBase {
-    private final TaskRepository taskRepository;
+    private TaskRepository taskRepository;
 
     public TaskServiceImpl(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
@@ -15,7 +15,8 @@ public class TaskServiceImpl extends TaskServiceGrpc.TaskServiceImplBase {
 
     @Override
     public void addTask(TaskServiceOuterClass.TaskRequest request, StreamObserver<TaskServiceOuterClass.TaskResponse> responseObserver) {
-        Task task = taskRepository.save(new Task(request.getName(), request.getDescription(), request.getDone()));
+        Task task = new Task(request.getName(), request.getDescription(), request.getDone());
+        taskRepository.save(task);
         TaskServiceOuterClass.TaskResponse taskResponse = TaskServiceOuterClass.TaskResponse.newBuilder()
                 .setId(task.getId())
                 .setName(task.getName())
